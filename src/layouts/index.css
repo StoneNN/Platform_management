@@ -1,0 +1,14 @@
+.normal {
+    font-family: Georgia, sans-serif;
+    text-align: center;
+}
+
+.logoBox {
+    background-color: cadetblue;
+    text-align: left;
+    height: 100px;
+}
+
+.logo{
+    height: 100%;
+}
