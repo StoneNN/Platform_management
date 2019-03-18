@@ -7,7 +7,6 @@ import Mock, {Random} from 'mockjs';
     dataSource.push(
       Mock.mock({
         key:'00000'+i,
-        memberNo:'00000'+i,
         'nickName|1':Mock.Random.name(),
         'realName|1':Mock.Random.cname(),
         'gender|1':["男","女"],
@@ -15,6 +14,7 @@ import Mock, {Random} from 'mockjs';
         email:Random.email('.com'),
         'weChat|1':/^[a-zA-Z0-9]{6,10}$/,
         'qq|1':/^1[0-6]{10}$/,
+        password:/^[a-zA-Z0-9]{6,18}$/,
         address:Mock.mock('@county(true)')
       }));
     }
@@ -24,7 +24,7 @@ import Mock, {Random} from 'mockjs';
     export default {
       'POST /api/player': (req,res)=>{
           console.log('------ req.body ------',req.body);
-          const {memberNo,nickName,realName,gender,phoneNo,email,weChat,qq,address,method,deleteKeys=[],key} = req.body;
+          const {key,nickName,realName,gender,phoneNo,email,weChat,qq,password,address,method,deleteKeys=[]} = req.body;
           console.log('------ method -------',method);
 
           if(method==='mapData'){
@@ -52,19 +52,35 @@ import Mock, {Random} from 'mockjs';
           }else if(method==='add'){
             console.log('add');
                 dataSource.unshift({
-                key: new Date().getTime(),
-                name,
-                type,
-                owner,
-                phone,
+                nickName,
+                realName,
+                key,
+                gender,
+                phoneNo,
+                email,
+                qq,
+                weChat,
+                password,
                 address
               });
                 res.json(dataSource);
           }else if(method==='edit'){
-            console.log(2);
-                dataSource.forEach((item,index)=>{
+            console.log('edit');
+                dataSource.forEach((item, index)=>{
+
                     if(item.key === key){
-                      dataSource[index] = {key,name,type,owner,phone,address};
+                      dataSource[index] = {
+                        key,
+                        nickName,
+                        realName,
+                        gender,
+                        phoneNo,
+                        email,
+                        qq,
+                        weChat,
+                        password,
+                        address
+                      };
                     }
                 });
                 res.json(dataSource);

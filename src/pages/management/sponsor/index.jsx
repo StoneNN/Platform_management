@@ -2,7 +2,7 @@
  * @Author: Nxf
  * @Date: 2019-03-04 10:18:36
  * @Last Modified by: Nxf
- * @Last Modified time: 2019-03-12 17:18:47
+ * @Last Modified time: 2019-03-18 11:12:31
  */
 import React, { Component } from "react";
 import { Table ,Form, Input, Button, Select, Modal, Popconfirm, Divider } from 'antd';
@@ -70,76 +70,76 @@ SearchForm = connect(({sponsor})=>({sponsor}))(SearchForm);
 
 class TableList extends Component{
     constructor(props){
-        super(props)
-        this.state={
-            selectedRows : [],
-            visible:false,
-            isAdding:false,
-            currentRowData:{}
-        }
+      super(props)
+      this.state={
+          selectedRows : [],
+          visible:false,
+          isAdding:false,
+          currentRowData:{}
+      }
     }
     fetchData = () => {
-        this.props.dispatch({
-            type:'sponsor/fetch'
-        })
+      this.props.dispatch({
+          type:'sponsor/fetch'
+      })
     }
     componentDidMount(){
         this.fetchData()
     }
     onChange = (selectedRowKeys, selectedRows) => {
-        console.log(selectedRows);
-        this.setState({
-            selectedRows
-        })
+      console.log(selectedRows);
+      this.setState({
+          selectedRows
+      })
     }
     handleDelete= () => {
-        const selectKeys = this.state.selectedRows.map((Row)=>(Row.key));
-        console.log(selectKeys);
-        this.props.dispatch({
-            type:'sponsor/delete',
-            payload:{deleteKeys:selectKeys}
-        })
+      console.log('-- selectedRows --',this.state.selectedRows);
+      const selectKeys = this.state.selectedRows.map((Row)=>(Row.key));
+      console.log(selectKeys);
+      this.props.dispatch({
+          type:'sponsor/delete',
+          payload:{deleteKeys:selectKeys}
+      })
     }
     deleteOne = (deleteKey) => {
-        console.log(deleteKey);
-        this.props.dispatch({
-            type:'sponsor/delete',
-            payload:{deleteKeys:[deleteKey]}
-        })
+      console.log(deleteKey);
+      this.props.dispatch({
+          type:'sponsor/delete',
+          payload:{deleteKeys:[deleteKey]}
+      })
     }
     handleCancel = (e) => {
-
+      this.setState({
+          visible: false,
+      });
+    }
+    showEditModal = (record) =>{
+      console.log(record);
+      this.setState({
+          isAdding:false,
+          visible: true,
+          currentRowData:record
+      })
+    }
+    showAddModal = () =>{
+      this.setState({
+          isAdding:true,
+          visible: true,
+      })
+    }
+    handleEdit = () => {
+      const { dispatch,form } = this.props;
+      const {currentRowData} = this.state;
+      form.validateFields((err, values) => {
+        if (err) return;
         this.setState({
             visible: false,
         });
-    }
-    showEditModal = (record) =>{
-        console.log(record);
-        this.setState({
-            isAdding:false,
-            visible: true,
-            currentRowData:record
+        dispatch({
+            type:'sponsor/edit',
+            payload:{...currentRowData, ...values}
         })
-    }
-    showAddModal = () =>{
-        this.setState({
-            isAdding:true,
-            visible: true,
-        })
-    }
-    handleEdit = () => {
-        const { dispatch,form } = this.props;
-        const {currentRowData} = this.state;
-        form.validateFields((err, values) => {
-            if (err) return;
-            this.setState({
-                visible: false,
-            });
-            dispatch({
-                type:'sponsor/edit',
-                payload:{...currentRowData, ...values}
-            })
-    })
+      })
     }
 
     handleAdd = () => {

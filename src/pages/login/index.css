@@ -3,7 +3,6 @@
   width: 368px;
   margin: 0 auto;
   padding-top: 10%;
-  @media screen and (max-width: @screen-sm) {width: 95%;}
 }
 
 .loginBox{

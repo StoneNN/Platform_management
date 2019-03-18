@@ -52,6 +52,7 @@ export default {
   },
   reducers: {
     save(state, {payload}) {
+      console.log('------ save ------',payload);
       return {
         ...state,
         dataList: payload

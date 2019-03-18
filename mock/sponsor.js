@@ -10,7 +10,9 @@ import Mock, {Random} from 'mockjs';
         'name|1':['石家庄桥牌协会','北京桥牌协会','宏鸿集团','恒大桥牌俱乐部','腾讯科技有限公司','华为桥牌俱乐部','邢台桥牌协会'],
         type:Mock.Random.integer(0,1,2),
         owner:Mock.Random.cname(),
-        'phone|1':/^1[0-9]{10}$/ ,
+        'phone|1':/^1[0-9]{10}$/,
+        password:/^[a-zA-Z0-9]{6,18}$/,
+        email:Mock.mock('@email()'),
         address:Random.county(true)
       }));
     }
@@ -20,7 +22,7 @@ import Mock, {Random} from 'mockjs';
     export default {
       'POST /api/sponsor': (req,res)=>{
           console.log('------ req.body ------',req.body);
-          const {name,type,owner,phone,address,method,deleteKeys=[],key} = req.body;
+          const {name,type,owner,phone,address,method,password,deleteKeys=[],key} = req.body;
           console.log('------ method -------',method);
 
           if(method==='mapData'){
@@ -53,6 +55,7 @@ import Mock, {Random} from 'mockjs';
                 type,
                 owner,
                 phone,
+                password,
                 address
               });
                 res.json(dataSource);
@@ -60,7 +63,7 @@ import Mock, {Random} from 'mockjs';
             console.log(2);
                 dataSource.forEach((item,index)=>{
                     if(item.key === key){
-                      dataSource[index] = {key,name,type,owner,phone,address};
+                      dataSource[index] = {key,name,type,owner,phone,password,address};
                     }
                 });
                 res.json(dataSource);
