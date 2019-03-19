@@ -9,6 +9,38 @@
     height: 100px;
 }
 
-.logo{
-    height: 100%;
-}
+ @media screen and (min-width: 100px){
+    .logo{
+       height: 60px;
+       margin-left: 4%;
+       margin-top: 20px;
+    }
+ }
+ 
+ @media screen and (min-width: 512px){
+    .logo{
+       height: 60px;
+       margin-left: 4%;
+       margin-top: 20px;
+    }
+ }
+ 
+ .userCol{
+    position: relative;
+    text-align: right;
+ }
+ .dropDown{
+    position: absolute;
+    height:60px;
+    right: 20px; 
+    top:40px;
+    color: black;
+ }
+ .loginSpan{
+    display: inline-block;
+   position: absolute;
+   height:60px;
+   right: 20px; 
+   top:40px;
+   color: black;
+ }

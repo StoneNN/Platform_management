@@ -11,7 +11,6 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
 class LoginComp extends Component {
   state = {
-    notice: '',
     type: 'tab1',
     autoLogin: true,
     visible:false
@@ -42,28 +41,15 @@ class LoginComp extends Component {
   onSubmit = (err, values) => {
     console.log('value collected ------->', { ...values, autoLogin: this.state.autoLogin });
     if (this.state.type === 'tab1') {
-      this.setState(
-        {
-          notice: '',
-        },
-        () => {
-          console.log('--- value判断 ----',values,'???',err);
-          if (!err) {
-            console.log('Received values of form: ', values);
-              this.props.dispatch({
-                type:'login_m/login',
-                payload:{name:values.username, pwd:values.password}
-              });
-            }
-        // if (!err && (values.username !== 'qqq' || values.password !== '111')) {
-        //   setTimeout(() => {
-        //     this.setState({
-        //       notice: '输入有误，请重新输入!',
-        //     });
-        //   }, 500);
-        // }
+  
+      console.log('--- value判断 ----',values,'???',err);
+      if (!err) {
+        console.log('Received values of form: ', values);
+          this.props.dispatch({
+            type:'login_m/login',
+            payload:{name:values.username, pwd:values.password}
+          });
         }
-      );
     }
   }
   onTabChange = (key) => {

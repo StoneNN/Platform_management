@@ -2,7 +2,7 @@
 import { queryItems } from '@/services/api';
 
 export default {
-  namespace: 'sponsor',
+  namespace: 'advertiser',
 
   state: {
     list: [],
@@ -11,7 +11,7 @@ export default {
 
   effects: {
     *fetch( {payload}, { call, put }) {
-      const response = yield call(queryItems,{method:'mapData', target:'sponsor'});
+      const response = yield call(queryItems,{method:'mapData', target:'advertiser'});
       console.log(response);
       yield put({
         type: 'save',
@@ -19,7 +19,7 @@ export default {
       });
     },
     *search({payload},{call,put}) {
-        const response = yield call(queryItems,{...payload, method:'search', target:'sponsor'});
+        const response = yield call(queryItems,{...payload, method:'search', target:'advertiser'});
         console.log('------ response ------',response);
         yield put({
             type: 'save',
@@ -27,7 +27,7 @@ export default {
         });
     },
     *delete({payload},{call,put}) {
-        const response = yield call(queryItems,{...payload, method:'delete', target:'sponsor'});
+        const response = yield call(queryItems,{...payload, method:'delete', target:'advertiser'});
         yield put({
             type: 'save',
             payload: response,
@@ -35,7 +35,7 @@ export default {
     },
     *add({payload},{call,put}) {
       console.log(payload);
-      const response = yield call(queryItems,{...payload, method:'add', target:'sponsor'});
+      const response = yield call(queryItems,{...payload, method:'add', target:'advertiser'});
       yield put({
           type: 'save',
           payload: response,
@@ -43,7 +43,7 @@ export default {
     },
     *edit({payload},{call,put}) {
       console.log(payload);
-      const response = yield call(queryItems,{...payload, method:'edit', target:'sponsor'});
+      const response = yield call(queryItems,{...payload, method:'edit', target:'advertiser'});
       yield put({
           type: 'save',
           payload: response,
@@ -53,7 +53,7 @@ export default {
   },
   reducers: {
     save(state, {payload}) {
-      console.log('----- sponsor ----',payload);
+      console.log('----- advertiser ----',payload);
       return {
         ...state,
         list: payload

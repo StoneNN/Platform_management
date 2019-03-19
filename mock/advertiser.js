@@ -6,9 +6,8 @@ import Mock, {Random} from 'mockjs';
   for (let i = 0; i < 7; i += 1) {
     dataSource.push(
       Mock.mock({
-        key:i+'sp',
-        'name|1':['石家庄桥牌协会','北京桥牌协会','宏鸿集团','恒大桥牌俱乐部','腾讯科技有限公司','华为桥牌俱乐部','邢台桥牌协会'],
-        'type|1':["协会","俱乐部"],
+        key:i+'ad',
+        'name|1':['君乐宝集团','耐克运动','宏鸿集团','恒大集团','腾讯科技有限公司','华为移动','中国联通'],
         owner:Mock.Random.cname(),
         'phone|1':/^1[0-9]{10}$/,
         password:/^[a-zA-Z0-9]{6,18}$/,
@@ -22,9 +21,9 @@ import Mock, {Random} from 'mockjs';
     console.log('-------dataSource-------',dataSource);
 
     export default {
-      'POST /api/sponsor': (req,res)=>{
+      'POST /api/advertiser': (req,res)=>{
           console.log('------ req.body ------',req.body);
-          const {name,type,owner,phone,address,method,password,email,weChat,qq,deleteKeys=[],key} = req.body;
+          const {name,owner,phone,address,method,password,email,weChat,qq,deleteKeys=[],key} = req.body;
           console.log('------ method -------',method);
 
           if(method==='mapData'){
@@ -54,7 +53,6 @@ import Mock, {Random} from 'mockjs';
                 dataSource.unshift({
                 key,
                 name,
-                type,
                 owner,
                 phone,
                 email,
@@ -68,7 +66,7 @@ import Mock, {Random} from 'mockjs';
             console.log(2);
                 dataSource.forEach((item,index)=>{
                     if(item.key === key){
-                      dataSource[index] = {key,name,type,owner,phone,email,weChat,qq,password,address};
+                      dataSource[index] = {key,name,owner,phone,email,weChat,qq,password,address};
                     }
                 });
                 res.json(dataSource);

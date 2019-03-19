@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import { Button, Card, Modal, Form, Row, Col, Input, Select } from 'antd';
 // import router from 'umi/router';
-import styles from "./sponsorInfo.less";
+import styles from "./advertiseInfo.less";
 import Link from "umi/link";
 import { connect } from 'dva';
 
@@ -22,7 +22,7 @@ class InfoView extends Component{
     super(props);
     this.state={
       visible:false,
-      sponsorInfo:this.props.location.query
+      advertiseInfo:this.props.location.query
     }
   }
 
@@ -45,14 +45,14 @@ class InfoView extends Component{
   handleEdit = () => {
     const { dispatch,form } = this.props;
     form.validateFields((err, values) => {
-      console.log('----- sponsor编辑 -----',values);
+      console.log('----- advertise编辑 -----',values);
       if (err) return;
       this.setState({
           visible: false,
-          sponsorInfo:values
+          advertiseInfo:values
       });
       dispatch({
-          type:'sponsor/edit',
+          type:'advertiser/edit',
           payload:values
       })
     })
@@ -62,7 +62,7 @@ class InfoView extends Component{
   render(){
 
     const { getFieldDecorator } = this.props.form;
-    const sponsorInfo = this.state.sponsorInfo;
+    const advertiseInfo = this.state.advertiseInfo;
     const{visible} = this.state;
 
     const prefixSelector = getFieldDecorator('prefix', {
@@ -78,49 +78,45 @@ class InfoView extends Component{
       <React.Fragment>
         {/* 信息展示 */}
         <Card
-          title="主办方信息"
+          title="赞助商信息"
           bordered={true}
-          extra={<Link to='/management/sponsor'>返回</Link>}
+          extra={<Link to='/management/advertise'>返回</Link>}
         >
           <p>
             <span className={styles.list_text}>会员号：</span>
-            <span className={styles.p_text}>{sponsorInfo.key}</span>
+            <span className={styles.p_text}>{advertiseInfo.key}</span>
           </p>
           <p>
-            <span className={styles.list_text}>主办方名称：</span>
-            <span className={styles.p_text}>{sponsorInfo.name}</span>
-          </p>
-          <p>
-            <span className={styles.list_text}>主办方类型：</span>
-            <span className={styles.p_text}>{sponsorInfo.type}</span>
+            <span className={styles.list_text}>赞助商名称：</span>
+            <span className={styles.p_text}>{advertiseInfo.name}</span>
           </p>
           <p>
             <span className={styles.list_text}>负责人：</span>
-            <span className={styles.p_text}>{sponsorInfo.owner}</span>
+            <span className={styles.p_text}>{advertiseInfo.owner}</span>
           </p>
           <p>
             <span className={styles.list_text}>手机号：</span>
-            <span className={styles.p_text}>{sponsorInfo.phone}</span>
+            <span className={styles.p_text}>{advertiseInfo.phone}</span>
           </p>
           <p>
             <span className={styles.list_text}>邮箱：</span>
-            <span className={styles.p_text}>{sponsorInfo.email}</span>
+            <span className={styles.p_text}>{advertiseInfo.email}</span>
           </p>
           <p>
             <span className={styles.list_text}>QQ：</span>
-            <span className={styles.p_text}>{sponsorInfo.qq}</span>
+            <span className={styles.p_text}>{advertiseInfo.qq}</span>
           </p>
           <p>
             <span className={styles.list_text}>微信：</span>
-            <span className={styles.p_text}>{sponsorInfo.weChat}</span>
+            <span className={styles.p_text}>{advertiseInfo.weChat}</span>
           </p>
           <p>
             <span className={styles.list_text}>密码：</span>
-            <span className={styles.p_text}>{sponsorInfo.password}</span>
+            <span className={styles.p_text}>{advertiseInfo.password}</span>
           </p>
           <p>
             <span className={styles.list_text}>地址：</span>
-            <span className={styles.p_text}>{sponsorInfo.address}</span>
+            <span className={styles.p_text}>{advertiseInfo.address}</span>
           </p>
 
           <Button
@@ -147,40 +143,27 @@ class InfoView extends Component{
                    <Col span={12}>
                     <FormItem label="会员号" >
                       {getFieldDecorator('key', {
-                        initialValue:sponsorInfo.key,
+                        initialValue:advertiseInfo.key,
                         rules: [{ required: true, message: '请输入会员号' }],
                       })(<Input placeholder="会员号" disabled/>)
                       }
                     </FormItem>
                    </Col>
-                   <Col span={12}>
-                   <FormItem label="主办方名称" >
-                      {getFieldDecorator('name', {
-                        initialValue:sponsorInfo.name,
-                        rules: [{ required: true, message: '请输入主办方名称' }],
-                      })(<Input placeholder="主办方名称" />)
-                    }
-                    </FormItem>
-                    </Col>
                   </Row>
                   <Row gutter={20} >
                    <Col span={12}>
-                   <FormItem label="主办方类型" >
-                      {getFieldDecorator('type', {
-                        initialValue:sponsorInfo.type,
-                        rules: [{ required: true, message: '请输入主办方类型' }],
-                      })(
-                            <Select placeholder="请选择">
-                                <Option value="协会">协会</Option>
-                                <Option value="俱乐部">俱乐部</Option>
-                            </Select>)
+                    <FormItem label="赞助商名称" >
+                      {getFieldDecorator('name', {
+                        initialValue:advertiseInfo.name,
+                        rules: [{ required: true, message: '请输入赞助商名称' }],
+                      })(<Input placeholder="赞助商名称" />)
                     }
                     </FormItem>
                    </Col>
                    <Col span={12}>
                    <FormItem label="负责人" >
                       {getFieldDecorator('owner', {
-                        initialValue:sponsorInfo.owner,
+                        initialValue:advertiseInfo.owner,
                         rules: [{ required: true, message: '请输入负责人姓名' }],
                       })(<Input placeholder="负责人姓名" />)
                     }
@@ -191,7 +174,7 @@ class InfoView extends Component{
                    <Col span={12}>
                     <Form.Item label="联系电话" >
                       {getFieldDecorator('phone', {
-                        initialValue:sponsorInfo.phone,
+                        initialValue:advertiseInfo.phone,
                         rules: [{ required: true, message: '请输入联系电话' }],
                       })(
                         <Input addonBefore={prefixSelector} placeholder="联系电话"/>
@@ -201,7 +184,7 @@ class InfoView extends Component{
                    <Col span={12}>
                     <Form.Item label="E-mail" >
                       {getFieldDecorator('email', {
-                        initialValue:sponsorInfo.email,
+                        initialValue:advertiseInfo.email,
                         rules: [
                           { type: 'email', message: '输入的格式不对,请重输' },
                           { required: true, message: '请输入邮箱' }
@@ -216,7 +199,7 @@ class InfoView extends Component{
                    <Col span={12}>
                     <FormItem label="微信号" >
                       {getFieldDecorator('weChat', {
-                        initialValue:sponsorInfo.weChat,
+                        initialValue:advertiseInfo.weChat,
                         rules: [{ required: false, message: '请输入微信号' }],
                       })(<Input placeholder="微信号" />)
                     }
@@ -225,7 +208,7 @@ class InfoView extends Component{
                    <Col span={12}>
                     <FormItem label="QQ号" >
                       {getFieldDecorator('qq', {
-                        initialValue:sponsorInfo.qq,
+                        initialValue:advertiseInfo.qq,
                         rules: [{ required: false, message: '请输入QQ号' }],
                       })(<Input placeholder="QQ号" />)
                     }
@@ -236,7 +219,7 @@ class InfoView extends Component{
                   <Col span={12}>
                     <FormItem label="密码">
                         {getFieldDecorator('password', {
-                          initialValue:sponsorInfo.password,
+                          initialValue:advertiseInfo.password,
                           rules: [{ required: true, message: '请输入密码' }]
                         })(<Input placeholder="密码" />)}
                     </FormItem>
@@ -244,7 +227,7 @@ class InfoView extends Component{
                    <Col span={12}>
                     <FormItem label="住址">
                         {getFieldDecorator('address', {
-                          initialValue:sponsorInfo.address,
+                          initialValue:advertiseInfo.address,
                           rules: [{ required: true, message: '请输入居住地址' }]
                         })(<Input placeholder="住址" />)}
                     </FormItem>
@@ -258,5 +241,5 @@ class InfoView extends Component{
 }
 
 InfoView = Form.create('信息编辑表单')(InfoView);
-InfoView = connect(({sponsor})=>({sponsor}))(InfoView);
+InfoView = connect(({advertise})=>({advertise}))(InfoView);
 export default InfoView;

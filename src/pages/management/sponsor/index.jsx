@@ -5,7 +5,8 @@
  * @Last Modified time: 2019-03-18 11:12:31
  */
 import React, { Component } from "react";
-import { Table ,Form, Input, Button, Select, Modal, Popconfirm, Divider } from 'antd';
+import { Table ,Form, Input, Button, Select, Modal, Popconfirm, Divider, Row, Col } from 'antd';
+import router from "umi/router";
 import { connect } from 'dva';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -35,7 +36,7 @@ class SearchForm extends Component {
     }
     handleFormReset = ()=>{
         this.props.form.resetFields();
-        // this.props.handleFormReset();
+        this.props.handleFormReset();
         // console.log(this.props.handleFormReset());
     }
     render(){
@@ -78,6 +79,7 @@ class TableList extends Component{
           currentRowData:{}
       }
     }
+    
     fetchData = () => {
       this.props.dispatch({
           type:'sponsor/fetch'
@@ -86,6 +88,16 @@ class TableList extends Component{
     componentDidMount(){
         this.fetchData()
     }
+    // 查看详情
+    onCheck = (record) => {
+        console.log('---- record -----',record);
+        router.push({
+            pathname:'/management/sponsor/sponsorInfo',
+            query:record
+        });
+    }
+
+
     onChange = (selectedRowKeys, selectedRows) => {
       console.log(selectedRows);
       this.setState({
@@ -94,7 +106,7 @@ class TableList extends Component{
     }
     handleDelete= () => {
       console.log('-- selectedRows --',this.state.selectedRows);
-      const selectKeys = this.state.selectedRows.map((Row)=>(Row.key));
+      const selectKeys = this.state.selectedRows.map((item)=>(item.key));
       console.log(selectKeys);
       this.props.dispatch({
           type:'sponsor/delete',
@@ -127,20 +139,20 @@ class TableList extends Component{
           visible: true,
       })
     }
-    handleEdit = () => {
-      const { dispatch,form } = this.props;
-      const {currentRowData} = this.state;
-      form.validateFields((err, values) => {
-        if (err) return;
-        this.setState({
-            visible: false,
-        });
-        dispatch({
-            type:'sponsor/edit',
-            payload:{...currentRowData, ...values}
-        })
-      })
-    }
+    // handleEdit = () => {
+    //   const { dispatch,form } = this.props;
+    //   const {currentRowData} = this.state;
+    //   form.validateFields((err, values) => {
+    //     if (err) return;
+    //     this.setState({
+    //         visible: false,
+    //     });
+    //     dispatch({
+    //         type:'sponsor/edit',
+    //         payload:{...currentRowData, ...values}
+    //     })
+    //   })
+    // }
 
     handleAdd = () => {
         const { dispatch,form } = this.props;
@@ -159,6 +171,10 @@ class TableList extends Component{
 
     render(){
         const columns = [{
+            title: '会员号',
+            dataIndex: 'key',
+            align:'center'
+        },{
             title: '名称',
             dataIndex: 'name',
             align:'center'
@@ -166,7 +182,6 @@ class TableList extends Component{
             title: '类型',
             dataIndex: 'type',
             align:'center',
-            render: val => (val === 0 ? '协会':'俱乐部'),
         }, {
             title: '负责人',
             dataIndex: 'owner',
@@ -186,13 +201,23 @@ class TableList extends Component{
             align:'center',
             render: (text,record) => {
                 console.log(record.key);
-                return (<div>
-                            <Popconfirm title="确认删除?" okText="确认" cancelText="取消" onConfirm={() => {this.deleteOne(record.key)}} >
-                            <a href="# ">删除</a>
-                            </Popconfirm>
-                            <Divider type="vertical" />
-                            <a href="# " onClick={()=>this.showEditModal(record)}>编辑</a>
-                        </div>)
+                return (
+                    <div>
+                        <a 
+                        href="# " 
+                        onClick={()=>this.onCheck(record)}
+                        >查看</a>
+                        <Divider type="vertical" />
+                        <Popconfirm 
+                        title="确认删除?" 
+                        okText="确认" 
+                        cancelText="取消" 
+                        onConfirm={() => {this.deleteOne(record.key)}} 
+                        >
+                        <a href="# ">删除</a>
+                        </Popconfirm>     
+                    </div>
+                )
             },
         }];
 
@@ -201,95 +226,121 @@ class TableList extends Component{
         const {visible,isAdding,currentRowData} = this.state;
         console.log('-------- this.state -------',this.state);
         console.log('------- currentRowData -------',currentRowData)
-        const modalFooter =
-        isAdding ? { okText: '添加', onOk: this.handleAdd, onCancel: this.handleCancel}
-            : { okText: '保存', onOk: this.handleEdit, onCancel: this.handleCancel };
+ 
 
         const getModalContent = () => {
-            if(isAdding){
                 console.log('-------- isAdding-新建 --------');
+                const prefixSelector = getFieldDecorator('prefix', {
+                    initialValue: '86',
+                  })(
+                    <Select style={{ width: 70 }}>
+                      <Option value="86">+86</Option>
+                      <Option value="87">+87</Option>
+                    </Select>
+                  );
                 return (
-                <Form >
-                    <FormItem label="主办方名称" >
+                 <Form >
+                  <Row gutter={20} >
+                   <Col span={12}>
+                    <FormItem label="会员号" >
+                      {getFieldDecorator('key', {
+                          rules: [{ required: true, message: '请输入会员号' }],
+                      })(<Input placeholder="会员号"/>)
+                      }
+                    </FormItem>
+                   </Col>
+                   <Col span={12}>
+                   <FormItem label="主办方名称" >
                     {getFieldDecorator('name', {
                         rules: [{ required: true, message: '请输入主办方名称' }],
                     })(<Input placeholder="主办方名称" />)
                     }
                     </FormItem>
-                    <FormItem label="主办方类型" >
+                    </Col>
+                  </Row>
+                  <Row gutter={20} >
+                   <Col span={12}>
+                   <FormItem label="主办方类型" >
                     {getFieldDecorator('type', {
                         rules: [{ required: true, message: '请输入主办方类型' }],
                     })(
                             <Select placeholder="请选择">
-                                <Option value="0">协会</Option>
-                                <Option value="1">俱乐部</Option>
+                                <Option value="协会">协会</Option>
+                                <Option value="俱乐部">俱乐部</Option>
                             </Select>)
                     }
                     </FormItem>
-                    <FormItem label="负责人" >
+                   </Col>
+                   <Col span={12}>
+                   <FormItem label="负责人" >
                     {getFieldDecorator('owner', {
                         rules: [{ required: true, message: '请输入负责人姓名' }],
                     })(<Input placeholder="负责人姓名" />)
                     }
                     </FormItem>
-                    <FormItem label="联系电话" >
-                    {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: '请输入负责人联系电话' }],
-                    })(<Input placeholder="负责人联系电话" />)
+                   </Col>
+                  </Row>
+                  <Row gutter={20}>
+                   <Col span={12}>
+                    <Form.Item label="联系电话" >
+                      {getFieldDecorator('phone', {
+                        rules: [{ required: true, message: '请输入联系电话' }],
+                      })(
+                        <Input addonBefore={prefixSelector} placeholder="联系电话"/>
+                      )}
+                    </Form.Item>
+                   </Col>
+                   <Col span={12}>
+                    <Form.Item label="E-mail" >
+                      {getFieldDecorator('email', {
+                        rules: [
+                          { type: 'email', message: '输入的格式不对,请重输' },
+                          { required: true, message: '请输入邮箱' }
+                        ],
+                      })(
+                        <Input
+                          placeholder="邮箱"
+                        />
+                      )}
+                    </Form.Item>
+                   </Col>
+                  </Row>
+                  <Row gutter={20}>
+                   <Col span={12}>
+                    <FormItem label="微信号" >
+                    {getFieldDecorator('weChat', {
+                        rules: [{ required: false, message: '请输入微信号' }],
+                    })(<Input placeholder="微信号" />)
                     }
                     </FormItem>
-                    <FormItem label="地址">
-                        {getFieldDecorator('address', {
-                            rules: [{ required: true, message: '请输入地址' }]
-                        })(<Input placeholder="主办方地址" />)}
+                   </Col>
+                   <Col span={12}>
+                    <FormItem label="QQ号" >
+                    {getFieldDecorator('qq', {
+                        rules: [{ required: false, message: '请输入QQ号' }],
+                    })(<Input placeholder="QQ号" />)
+                    }
                     </FormItem>
+                   </Col>
+                  </Row>
+                  <Row gutter={20}>
+                  <Col span={12}>
+                    <FormItem label="密码">
+                        {getFieldDecorator('password', {
+                          rules: [{ required: true, message: '请输入密码' }]
+                        })(<Input placeholder="密码" />)}
+                    </FormItem>
+                   </Col>
+                   <Col span={12}>
+                    <FormItem label="住址">
+                        {getFieldDecorator('address', {
+                            rules: [{ required: true, message: '请输入居住地址' }]
+                        })(<Input placeholder="住址" />)}
+                    </FormItem>
+                   </Col>
+                  </Row>
                 </Form>
             );
-            }else{
-                console.log('-------- isAdding-编辑 --------');
-                return (
-                  <Form >
-                    <FormItem label="主办方名称" >
-                    {getFieldDecorator('name', {
-                        initialValue:currentRowData.name,
-                        rules: [{ required: true, message: '请输入主办方名称' }],
-                    })(<Input placeholder="主办方名称" />)
-                    }
-                    </FormItem>
-                    <FormItem label="主办方类型" >
-                    {getFieldDecorator('type', {
-                        initialValue:currentRowData.type === 0 ? '协会':'俱乐部',
-                        rules: [{ required: true, message: '请输入主办方类型' }],
-                    })(
-                            <Select placeholder="请选择" style={{ width: '200px' }}>
-                                <Option value="0">协会</Option>
-                                <Option value="1">俱乐部</Option>
-                            </Select>)
-                    }
-                    </FormItem>
-                    <FormItem label="负责人" >
-                    {getFieldDecorator('owner', {
-                        initialValue:currentRowData.owner,
-                        rules: [{ required: true, message: '请输入负责人姓名' }],
-                    })(<Input placeholder="负责人姓名" />)
-                    }
-                    </FormItem>
-                    <FormItem label="联系电话" >
-                    {getFieldDecorator('phone', {
-                        initialValue:currentRowData.phone,
-                        rules: [{ required: true, message: '请输入负责人联系电话' }],
-                    })(<Input placeholder="负责人联系电话" />)
-                    }
-                    </FormItem>
-                    <FormItem label="地址">
-                        {getFieldDecorator('address', {
-                            initialValue:currentRowData.address,
-                            rules: [{ required: true, message: '请输入地址' }]
-                        })(<Input placeholder="主办方地址" />)}
-                    </FormItem>
-                  </Form>
-                );
-            }
         };
 
         return (
@@ -312,12 +363,14 @@ class TableList extends Component{
                     columns={columns}
                 />
                 <Modal
-                title={isAdding?'添加':'编辑'}
-                width={400}
+                title={'添加主办方'}
+                width={800}
                 cancelText='取消'
+                okText='添加'
                 destroyOnClose
                 visible={visible}
-                {...modalFooter}
+                onOk={this.handleAdd} 
+                onCancel={this.handleCancel}
                 >
                     {getModalContent()}
                 </Modal>

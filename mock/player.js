@@ -6,7 +6,7 @@ import Mock, {Random} from 'mockjs';
   for (let i = 0; i < 7; i += 1) {
     dataSource.push(
       Mock.mock({
-        key:'00000'+i,
+        key:i+'pl',
         'nickName|1':Mock.Random.name(),
         'realName|1':Mock.Random.cname(),
         'gender|1':["男","女"],
