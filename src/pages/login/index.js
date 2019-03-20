@@ -67,30 +67,30 @@ class LoginComp extends Component {
     console.log('------------ loginForm -----------',this.props.loginForm);
     return (
       <div className={styles.normal}>
-        {/* <h1 className={styles.title}>智赛棋牌赛事管理系统</h1> */}
+        <h1 className={styles.title}>智赛棋牌平台管理系统</h1>
         <Login
           defaultActiveKey={this.state.type}
           onTabChange={this.onTabChange}
           onSubmit={this.onSubmit}
           className={styles.loginBox}
         >
-          <Tab key="tab1" tab="账号登录">
+          {/* <Tab key="tab1" tab="账号登录"> */}
             {
               this.state.notice &&
               <Alert style={{ marginBottom: 24 }} message={this.state.notice} type="error" showIcon closable />
             }
             <UserName
               name="username"
-              placeholder="用户名"
-              rules={[{required: true, message: '用户名不能为空!'}]}
+              placeholder="管理员账号"
+              rules={[{required: true, message: '管理员账号不能为空!'}]}
             />
             <Password
               name="password"
               placeholder="密码"
               rules = {[{required: true, message: '密码不能为空!'}]}
             />
-          </Tab>
-          <Tab key="tab2" tab="验证码登录">
+          {/* </Tab> */}
+          {/* <Tab key="tab2" tab="验证码登录">
             <Mobile
               name="mobile"
               placeholder="手机号"
@@ -102,7 +102,7 @@ class LoginComp extends Component {
               placeholder="验证码"
               rules = {[{required: true, message: '验证码不能为空!'}]}
             />
-          </Tab>
+          </Tab> */}
           <div>
             <Checkbox
               checked={this.state.autoLogin}
