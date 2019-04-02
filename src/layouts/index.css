@@ -11,19 +11,27 @@
 
  @media screen and (min-width: 100px){
     .logo{
-       height: 60px;
+       height: 70px;
        margin-left: 4%;
-       margin-top: 20px;
+       margin-top: 15px;
     }
  }
  
  @media screen and (min-width: 512px){
     .logo{
-       height: 60px;
+       height: 70px;
        margin-left: 4%;
-       margin-top: 20px;
+       margin-top: 15px;
     }
  }
+
+@media screen and (min-width: 992px){
+   .logo{
+      height: 90px;
+      margin-left: 4%;
+      margin-top: 5px;
+   }
+}
  
  .userCol{
     position: relative;

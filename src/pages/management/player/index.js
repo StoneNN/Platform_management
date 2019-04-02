@@ -2,7 +2,7 @@
  * @Author: Nxf
  * @Description:
  * @Date: 2019-03-02 16:30:29
- * @LastEditTime: 2019-03-02 17:11:20
+ * @LastEditTime: 2019-04-02 09:30:40
  */
 
 import React, { Component }  from "react";
@@ -287,6 +287,13 @@ class PlayersTableBlock extends Component{
                    </Col>
                   </Row>
                   <Row gutter={20}>
+                  <Col span={12}>
+                    <FormItem label="密码">
+                        {getFieldDecorator('password', {
+                          rules: [{ required: true, message: '请输入密码' }]
+                        })(<Input placeholder="密码" />)}
+                    </FormItem>
+                   </Col>               
                    <Col span={12}>
                     <FormItem label="住址">
                         {getFieldDecorator('address', {
