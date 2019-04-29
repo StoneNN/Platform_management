@@ -135,9 +135,9 @@ class LoginComp extends Component {
 
 // export default LoginComp;
 
-const mapStateToProps =({login_m}) =>{
+const mapStateToProps =(state) =>{
 
-  console.log('----- login_m ------',login_m)
-  return{loginForm:login_m}
+  console.log('----- login_m ------',state.login_m)
+  return{loginForm:state.login_m}
 }
 export default connect(mapStateToProps)(LoginComp);
